@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block title %}{% endblock %}
+  <!-- fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Roboto:400,700"
+    rel="stylesheet"
+  />
+  <meta name="google" content="notranslate" />
+
+  <!-- material icons -->
+  <link
+    href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    rel="stylesheet"
+  />
+
+  <!-- materialize css -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+  />
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Savings Tracker</title>
+  <style>
+    nav ul a,
+    nav .brand-logo {
+      color: #444
+    }
+
+    .sidenav-trigger {
+      color: #26a69a;
+    }
+
+    @media only screen and (max-width : 992px) {
+      body {
+        padding-left: 0;
+      }
+    }
+  </style>
+</head>
+{% if user.is_authenticated %}
+<body style="padding-left: 300px;">
+{% else %}
+<body>
+{% endif %}
+
+  <!-- only show nav if user's logged in -->
+  {% if user.is_authenticated %}
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+
+      <ul id="slide-out" class="sidenav sidenav-fixed">
+        <li><div class="user-view">
+          <div class="background">
+            <img src="{% static 'tracker/images/collins.jpg' %}">
+          </div>
+          <a href="#"><img class="circle" src="{% static 'tracker/images/account_circle.png' %}"></a>
+          <a href="#"><span class="white-text name">{{ user.first_name }} {{ user.last_name }}</span></a>
+          <a href="#"><span class="white-text email">{{ user.email }}</span></a>
+        </div></li>
+        <li><a class="waves-effect" href="{% url 'landing' %}"><i class="material-icons">home</i>Home</a></li>
+        <li><a class="waves-effect" href="{% url 'conversions' %}"><i class="material-icons">swap_horiz</i>Conversions</a></li>
+        <div class="divider"></div>
+        <li><a class="waves-effect" href="{% url 'logout' %}"><i class="material-icons">logout</i> Logout</a></li>
+      </ul>
+      <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+  {% endif %}
+
+
+  
+  {% block content %}
+  {% endblock %}
+
+  <!-- compiled and minified js -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+  <!-- materialize nav js -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, {});
+  });
+  </script>
+
+  <!-- Show Django messages -->
+  {% if messages %}
+  {% for message in messages %}
+  
+  <script>M.toast({html: "{{ message }}", classes: 'green rounded', displayLength:2000});</script>
+  
+  {% endfor %}
+  {% endif %}
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,67 @@
+{% extends 'tracker/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Add Conversion</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div style="margin-top: 40px;" class="row">
+    <div class="col s12">
+      <form method="POST" action="{% url 'add-conversion' %}">
+        {% csrf_token %}
+        <fieldset>
+          <legend style="font-size: large;">Add a Conversion</legend>
+          <div style="margin-top: 20px;" class="input-field col s12">
+            <i class="material-icons prefix">text_fields</i>
+            <input placeholder="Enter Conversion Name Here" id="conversion_name" name="conversion_name" type="text" class="validate" required >
+            <label for="conversion_name">Conversion Name</label>
+          </div>
+          <div style="margin-top: 20px;" class="input-field col s12">
+            <i class="material-icons prefix">date_range</i>
+            <input class="datepicker" placeholder="Pick Start Date Here" id="start_date" name="start_date" type="text" class="validate" required >
+            <label for="start_date">Start Date</label>
+          </div>
+          <div style="margin-top: 20px;" class="input-field col s12">
+            <i class="material-icons prefix">date_range</i>
+            <input class="datepicker" placeholder="Pick End Date Here" id="end_date" name="end_date" type="text" class="validate" required >
+            <label for="end_date">End Date</label>
+          </div>
+          <div style="margin-top: 20px;" class="input-field col s12">
+            <i class="material-icons prefix">business</i>
+            <select multiple name="facilities" id="facilities">
+              <option value="21C">21C</option>
+              <option value="939">939</option>
+              <option value="971">971</option>
+              <option value="952">952</option>
+              <option value="872">872</option>
+              <option value="968">968</option>
+              <option value="954">954</option>
+            </select>
+            <label for="facilities">Facilities</label>
+          </div>
+          <button class="waves-effect waves-light btn" type="submit"><i class="material-icons left">add</i> Add</button>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  //init datepicker
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.datepicker');
+    var instances = M.Datepicker.init(elems, {format: 'yyyy-mm-dd'});
+  });
+
+  // init select facilities
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('select');
+    var instances = M.FormSelect.init(elems, {});
+  });
+</script>
+{% endblock %}

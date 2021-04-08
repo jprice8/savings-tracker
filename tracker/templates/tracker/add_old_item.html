@@ -1,0 +1,24 @@
+{% extends 'tracker/base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+<title>Add Old Item</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <form style="margin-top: 40px;" method="POST">
+        {% csrf_token %}
+        <fieldset>
+          <legend style="font-size: large;">Add Old Item to Convert</legend>
+          {{ form|crispy }}
+          <button class="waves-effect waves-light btn" type="submit"><i class="material-icons left"></i> Add</button>
+        </fieldset>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'tracker/base.html' %}
+
+{% block title %}
+<title>Conversion Table</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <div class="row">
+    <div class="col s6">
+      <h3>View All Conversions</h3>
+    </div>
+    <div class="col s4"></div>
+    <div class="col s2">
+      <a href="{% url 'add-conversion' %}" style="margin-top: 25px;" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+    </div>
+  </div>
+
+  <!-- Conversion Table -->
+  <div class="row">
+    <div class="col s12">
+      <table class="highlight">
+        <thead>
+          <tr>
+            <th>Conversion Name</th>
+            <th>Created On</th>
+            <th>Created By</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Facilities</th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for c in conversions %}
+          <tr>
+            <td><a href="{% url 'conversion-detail' c.id %}">{{ c.conversion_name }}</a></td>
+            <td>{{ c.created_on }}</td>
+            <td>{{ c.created_by }}</td>
+            <td>{{ c.start_date }}</td>
+            <td>{{ c.end_date }}</td>
+            <td>{{ c.facilities }}</td>
+            <td><a class="waves-effect waves-teal btn-flat">Edit</a></td>
+            <td><a class="waves-effect waves-teal btn-flat">Delete</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
