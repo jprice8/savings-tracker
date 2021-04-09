@@ -17,4 +17,7 @@ urlpatterns = [
 
     # tracker urls
     path('tracker/', include('tracker.urls')),
+
+    # analytics urls
+    path('analytics/', include('analytics.urls')),
 ]

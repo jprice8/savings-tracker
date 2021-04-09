@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block title %}
-<title>Add Old Item</title>
+<title>Edit Item</title>
 {% endblock %}
 
 {% block content %}
@@ -13,9 +13,9 @@
       <form style="margin-top: 40px;" method="POST">
         {% csrf_token %}
         <fieldset>
-          <legend style="font-size: large;">Add Old Item to Convert</legend>
+          <legend style="font-size: large;">Edit Item Information</legend>
           {{ form|crispy }}
-          <button class="waves-effect waves-light btn" type="submit"><i class="material-icons left">add</i> Add</button>
+          <button class="waves-effect waves-light btn" type="submit"><i class="material-icons left">system_update_alt</i> Edit</button>
         </fieldset>
       </form>
     </div>

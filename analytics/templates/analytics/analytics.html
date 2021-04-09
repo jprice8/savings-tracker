@@ -1,0 +1,73 @@
+{% extends 'tracker/base.html' %}
+{% block title %}<title>Analytics</title>{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <h4 class="center-align">Analytics for {{ conversion.conversion_name }}</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s2"></div>
+    <div class="col s8">
+      <div>
+        <h5>Savings Tracking</h5>
+        <canvas id="savings-chart" data-url="{% url 'savings-chart' conversion.id %}" style="width: 100%;" ></canvas>
+      </div>
+    </div>
+    <div class="col s2"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+
+<script>
+
+// Savings Chart
+function getChart() {
+  var $dasChart = $('#savings-chart')
+
+  $.ajax({
+    url: $dasChart.data('url'),
+    success: function(data) {
+      var ctx = $dasChart[0].getContext('2d');
+
+      // extract data from api call
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: data.total_labels,
+          datasets: [{
+            label: 'Conversion Savings',
+            data: data.total_data,
+            fill: false,
+            borderColor: 'lightblue',
+          }]
+        },
+        options: {
+          responsive: false,
+          fill: false,
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                precision: 0,
+                suggestedMax: 10,
+              }
+            }]
+          }
+        },
+      });
+
+    }
+  });
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  getChart();
+}, false);
+
+</script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'tracker/base.html' %}
+{% block title %}<title>{{ item.description }}</title>{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col s12">
+      <h3 class="center-align">Item Detail for {{ item.description }}</h3>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col s3"></div>
+
+    <div class="col s6">
+      <ul class="collection with-header">
+        <li class="collection-header">
+          <h5>
+            Item Information
+            <div style="float: right; ">
+              {% if new %}
+              <a href="{% url 'new-item-edit' item.id %}" class="waves-effect waves-teal btn-flat">Edit</a>
+              <a href="{% url 'new-item-delete' item.id %}" class="waves-effect waves-teal btn-flat">Delete</a>
+              {% else %}
+              <a href="{% url 'old-item-edit' item.id %}" class="waves-effect waves-teal btn-flat">Edit</a>
+              <a href="{% url 'old-item-delete' item.id %}" class="waves-effect waves-teal btn-flat">Delete</a>
+              {% endif %}
+            </div>
+          </h5>
+        </li>
+
+        <li class="collection-item"><div>Created On<a class="secondary-content">{{ item.created_on }}</a></div></li>
+        <li class="collection-item"><div>Created By<a class="secondary-content">{{ item.created_by }}</a></div></li>
+        <li class="collection-item"><div>IMMS #<a class="secondary-content">{{ item.imms }}</a></div></li>
+        <li class="collection-item"><div>POUM<a class="secondary-content">{{ item.poum }}</a></div></li>
+        <li class="collection-item"><div>UOM Conv. Factor<a class="secondary-content">{{ item.uom_conv_factor }}</a></div></li>
+        <li class="collection-item"><div>LUOM<a class="secondary-content">{{ item.luom }}</a></div></li>
+        <li class="collection-item"><div>Mfr<a class="secondary-content">{{ item.mfr }}</a></div></li>
+        <li class="collection-item"><div>Mfr Cat<a class="secondary-content">{{ item.mfr_cat_no }}</a></div></li>
+        <li class="collection-item"><div>Unit Cost<a class="secondary-content">{{ item.unit_cost }}</a></div></li>
+      </ul>
+    </div>
+
+    <div class="col s3"></div>
+  </div>
+</div>
+{% endblock %}

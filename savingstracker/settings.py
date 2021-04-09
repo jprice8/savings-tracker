@@ -17,6 +17,7 @@ import django_heroku
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TRACKER_TEMPLATE_DIR = os.path.join(BASE_DIR, "tracker", "templates")
+ANALYTICS_TEMPLATE_DIR = os.path.join(BASE_DIR, "analytics", "templates")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -47,6 +48,7 @@ INSTALLED_APPS = [
 
     'tracker',
     'users',
+    'analytics',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +69,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             TRACKER_TEMPLATE_DIR,
+            ANALYTICS_TEMPLATE_DIR,
         ],
         'APP_DIRS': True,
         'OPTIONS': {

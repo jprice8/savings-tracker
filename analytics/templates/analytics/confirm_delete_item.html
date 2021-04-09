@@ -1,0 +1,37 @@
+{% extends 'tracker/base.html' %}
+{% block title %}<title>Confirm Delete Item</title>{% endblock %}
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col s3"></div>
+
+    <div style="margin-top: 40px;" class="col s6">
+      {% if new %}
+      <form method="POST" action="{% url 'new-item-delete' item.id %}">
+      {% else %}
+      <form method="POST" action="{% url 'old-item-delete' item.id %}">
+      {% endif %}
+        {% csrf_token %}
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Confirm Delete Item</span>
+            <p>Are you sure you want to delete item: {{ item.description }}?</p>
+            <p>All relevant metrics will be deleted as well.</p>
+            <p>You cannot undo this action.</p>
+          </div>
+          <div class="card-action">
+            {% if new %}
+            <a href="{% url 'new-item-detail' item.id %}" class="waves-effect waves-teal btn-flat">Cancel</a>
+            {% else %}
+            <a href="{% url 'old-item-detail' item.id %}" class="waves-effect waves-teal btn-flat">Cancel</a>
+            {% endif %}
+            <button class="waves-effect waves-light btn red" type="submit">Delete</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="col s3"></div>
+  </div>
+</div>
+{% endblock %}

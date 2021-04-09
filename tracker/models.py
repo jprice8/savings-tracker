@@ -12,7 +12,7 @@ class Conversion(models.Model):
     facilities = ArrayField(models.CharField(max_length=10), blank=True)
 
     class Meta:
-        ordering = ('created_on',)
+        ordering = ('-created_on',)
 
     def __str__(self):
         return f'{self.conversion_name}'
@@ -56,7 +56,4 @@ class NewItem(models.Model):
 
     def __str__(self):
         return f'{self.description}'
-
-
-##### Intake Models ####
 

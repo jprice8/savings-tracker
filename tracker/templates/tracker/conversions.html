@@ -40,11 +40,11 @@
             <td><a href="{% url 'conversion-detail' c.id %}">{{ c.conversion_name }}</a></td>
             <td>{{ c.created_on }}</td>
             <td>{{ c.created_by }}</td>
-            <td>{{ c.start_date }}</td>
-            <td>{{ c.end_date }}</td>
+            <td>{{ c.start_date|date:'M d Y' }}</td>
+            <td>{{ c.end_date|date:'M d Y' }}</td>
             <td>{{ c.facilities }}</td>
-            <td><a class="waves-effect waves-teal btn-flat">Edit</a></td>
-            <td><a class="waves-effect waves-teal btn-flat">Delete</a></td>
+            <td><a href="{% url 'edit-conversion' c.id %}" class="waves-effect waves-teal btn-flat">Edit</a></td>
+            <td><a href="{% url 'delete-conversion' c.id %}" class="waves-effect waves-teal btn-flat">Delete</a></td>
           </tr>
           {% endfor %}
         </tbody>

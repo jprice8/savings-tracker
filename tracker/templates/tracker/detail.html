@@ -1,49 +1,106 @@
 {% extends 'tracker/base.html' %}
 
+{% load humanize %}
+
 {% block title %}
 <title>Conversion Detail</title>
 {% endblock %}
 
 {% block content %}
-<div style="margin-left: 20px; margin-right: 20px;">
+<div style="margin-left: 40px; margin-right: 40px;">
   <div class="row">
     <div class="col s12">
       <h2>Conversion Details</h2>
+      <h6 style="margin-left: 12px;"><em>{{ conversion.conversion_name }}</em></h6>
     </div>
   </div>
   <div class="divider"></div>
   
   <!-- Metrics -->
   <div class="row">
-    <div class="col s3">
-      <h4>Metrics</h4>
+    <h4 style="margin-left: 12px;">Metrics <a class="modal-trigger" href="#modal1"><i class="material-icons">info_outline</i></a></h4>
 
-      <ul class="collection">
-        <li class="collection-item">Savings Per Each:</li>
-        <li class="collection-item">New Item Purchase Orders:</li>
-        <li class="collection-item">New Item Issues:</li>
-        <li class="collection-item">Net Savings Estimate:</li>
+    <!-- Info Modal -->
+    <div id="modal1" class="modal">
+      <div class="modal-content">
+        <h4>Conversion Metrics</h4>
+        <div class="divider"></div>
+
+        <p>
+          <mark>New Items Savings Breakout</mark> - The proportional savings for each item in the New Items Bundle. 
+          Found by summing the unit costs for both the old items and new items then taking the difference.
+        </p>
+        <div class="divider"></div>
+
+        <p>
+          <mark>New Items Intake Breakout</mark> - The total issue and purchase order quantity for the new items bundle during
+          the conversion plan tracking period. All intake records have been normalized to their lowest unit of measure.
+          Filtered to only show relevant facilities. 
+          If 872 is included, only taking POs (excluding their issues to avoid double count).
+        </p>
+        <div class="divider"></div>
+
+        <p>
+          <mark>Conversion Savings</mark> - The total savings for each item in the New Item Bundle. Found by taking the product of
+          the item's unit savings and intake (New Items Savings Breakout * New Items Intake Breakout). Net savings is
+          the total sum of savings for new items.
+        </p>
+        <div class="divider"></div>
+
+        <p>
+          Press the "View Analytics" button to see a time series breakout of savings by facility.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Got it</a>
+      </div>
+    </div>
+
+    <div class="col s4">
+      <!-- Conversion Metrics -->
+      <ul class="collection with-header">
+        <li class="collection-header"><h5>Conversion Savings</h5></li>
+        {% for key, value in savings_dict.items %}
+        <li class="collection-item"><div>{{ key }}<a class="secondary-content">${{ value|floatformat:2|intcomma }}</a></div></li>
+        {% endfor %}
+        <li class="collection-item yellow"><div>Net Savings<a class="secondary-content">${{ net_savings|floatformat:2|intcomma }}</a></div></li>
       </ul>
 
-      <a class="waves-effect waves-light btn">View Analytics</a>
+      <a style="margin-top: 15px; margin-bottom: 15px;" href="{% url 'analytics' conversion.id %}" class="waves-effect waves-light btn">View Analytics</a>
+    </div>
+
+    <div class="col s4">
+      <!-- New Items Spend -->
+      <ul class="collection with-header">
+        <li class="collection-header"><h5>New Items Intake Breakout</h5></li>
+        {% for key, value in intake_dict.items %}
+        <li class="collection-item"><div>{{ key }}<a class="secondary-content">{{ value }}</a></div></li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="col s4">
+      <!-- New Items Spend -->
+      <ul class="collection with-header">
+        <li class="collection-header"><h5>New Items Savings Breakout</h5></li>
+        {% for key, value in p_savings.items %}
+        <li class="collection-item"><div>{{ key }}<a class="secondary-content">${{ value }}</a></div></li>
+        {% endfor %}
+      </ul>
     </div>
   </div>
 
   <div class="divider"></div>
   <div class="row">
     <div class="col s6">
-      <h4>Old Item</h4>
+      <h4>Old Items</h4>
       <div>
         <table>
           <thead>
             <tr>
               <th>IMMS #</th>
               <th>Description</th>
-              <th>POUM</th>
-              <th>Conv. Factor</th>
-              <th>LUOM</th>
               <th>Mfr</th>
-              <th>Mfr Cat No</th>
               <th>Unit Cost</th>
             </tr>
           </thead>
@@ -52,12 +109,8 @@
             {% for i in old_items %}
             <tr>
               <td>{{ i.imms }}</td>
-              <td><a href="#">{{ i.description }}</a></td>
-              <td>{{ i.poum }}</td>
-              <td>{{ i.uom_conv_factor }}</td>
-              <td>{{ i.luom }}</td>
+              <td><a href="{% url 'old-item-detail' i.id %}">{{ i.description }}</a></td>
               <td>{{ i.mfr }}</td>
-              <td>{{ i.mfr_cat_no }}</td>
               <td>${{ i.unit_cost }}</td>
             </tr>
             {% endfor %}
@@ -71,19 +124,15 @@
       </div>
 
     </div>
-    <div class="col s6">
-      <h4>New Item</h4>
+    <div style="border-left:1px solid #e0e0e0 ;" class="col s6">
+      <h4>New Items</h4>
       <div>
         <table>
           <thead>
             <tr>
               <th>IMMS #</th>
               <th>Description</th>
-              <th>POUM</th>
-              <th>Conv. Factor</th>
-              <th>LUOM</th>
               <th>Mfr</th>
-              <th>Mfr Cat No</th>
               <th>Unit Cost</th>
             </tr>
           </thead>
@@ -92,12 +141,8 @@
             {% for i in new_items %}
             <tr>
               <td>{{ i.imms }}</td>
-              <td><a href="#">{{ i.description }}</a></td>
-              <td>{{ i.poum }}</td>
-              <td>{{ i.uom_conv_factor }}</td>
-              <td>{{ i.luom }}</td>
+              <td><a href="{% url 'new-item-detail' i.id %}">{{ i.description }}</a></td>
               <td>{{ i.mfr }}</td>
-              <td>{{ i.mfr_cat_no }}</td>
               <td>${{ i.unit_cost }}</td>
             </tr>
             {% endfor %}
@@ -112,4 +157,13 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var elems = document.querySelectorAll('.modal');
+  var instances = M.Modal.init(elems, {});
+});
+</script>
 {% endblock %}
